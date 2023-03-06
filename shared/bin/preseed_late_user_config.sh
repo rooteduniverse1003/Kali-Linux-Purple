@@ -133,21 +133,19 @@ if [ -n $RET ]; then
     /etc/skel/.config/light-locker-dconf-defaults.conf 2>/dev/null || true
 
   # at this point users have already been created, so we need to re-apply our changes there
-  for HOMEDIR in $(getent passwd | cut -d: -f6); do
-    [ -f /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml ] && \
-      [ -d "$HOMEDIR"/.config/xfce4/xfconf/xfce-perchannel-xml/ ] && \
-      cp -f /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-power-manager.xml \
-            "$HOMEDIR"/.config/xfce4/xfconf/xfce-perchannel-xml/
+  for HOMEDIR in $(getent passwd | grep '/home\|/root' | cut -d: -f6); do
+    [ -d /etc/skel/.config ] && \
+      [ -d "$HOMEDIR"/ ] && \
+      cp -rf /etc/skel/.config \
+            "$HOMEDIR"/ && \
+      chown -R --reference="$HOMEDIR" "$HOMEDIR"/.config
 
-    [ -f /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml ] && \
-      [ -d "$HOMEDIR"/.config/xfce4/xfconf/xfce-perchannel-xml/ ] && \
-      cp -f /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml \
-            "$HOMEDIR"/.config/xfce4/xfconf/xfce-perchannel-xml/
+    [ -d /etc/skel/Malcolm ] && \
+      [ -d "$HOMEDIR"/ ] && \
+      cp -rf /etc/skel/Malcolm \
+            "$HOMEDIR"/ 
+      chown -R --reference="$HOMEDIR" "$HOMEDIR"/Malcolm
 
-    [ -f /etc/skel/.config/light-locker-dconf-defaults.conf ] && \
-      [ -d "$HOMEDIR"/.config/ ] && \
-      cp -f /etc/skel/.config/light-locker-dconf-defaults.conf \
-            "$HOMEDIR"/.config/
   done
 
 fi

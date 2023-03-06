@@ -64,7 +64,6 @@ gvfs-backends
 gvfs-daemons
 gvfs-fuse
 gzip
-hddtemp
 hdparm
 hfsplus
 hfsprogs
